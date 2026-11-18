@@ -1,22 +1,18 @@
-# GitHub deployment — quick guide
+# ZWAIGZNE 6.2 deployment
 
-### First deployment
-1. Create a **public** GitHub repository named `zwaigzne` (or another name you prefer).
-2. Upload every file in this package to the repository root.
-3. Go to **Settings → Pages**.
-4. Select **Deploy from a branch → main → /(root)** and save.
-5. Open the URL GitHub Pages provides.
+This package contains a standalone `index.html` and a GitHub Actions workflow at `.github/workflows/deploy-pages.yml`.
 
-### How we develop from here
-1. Keep `main` as the working stable version.
-2. Create a branch for each change (`fix/...`, `feature/...`).
-3. Make and test changes in the branch.
-4. Commit and open a Pull Request.
-5. Review and test on desktop, iPad and phone, then merge to `main`.
-6. Tag each tested milestone (`v6.1.1`, `v6.2.0`, etc.).
+## One-time setup
 
-### For feedback
-Report the version, device/browser, page, exact steps, expected result and actual result. Include a screenshot or short screen recording where useful. Do not overwrite `main` with an untested experiment.
+1. Upload the extracted package contents to the root of `laurisin/zwaigzne` (preserve the `.github/workflows/` folder).
+2. In GitHub, open **Settings → Pages**.
+3. Under **Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”).
+4. Commit the files to `main`.
+5. Open the **Actions** tab and check that **Deploy ZWAIGZNE to GitHub Pages** completes successfully.
+6. The public site remains `https://laurisin.github.io/zwaigzne/`.
 
-### Local preview
-Run `python -m http.server 8000` in the repository folder and visit `http://localhost:8000`.
+## Future releases
+
+Replace the root `index.html` (and `brand-logo.png` if changed) with the new release and commit to `main`. The workflow automatically builds and deploys the site. You can also run it manually from **Actions → Deploy ZWAIGZNE to GitHub Pages → Run workflow**.
+
+The workflow publishes only `index.html` and `brand-logo.png`; documentation and ZIP files are not copied to the public site.
