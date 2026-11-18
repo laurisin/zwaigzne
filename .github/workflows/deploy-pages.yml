@@ -1,0 +1,48 @@
+
+name: Deploy ZWAIGZNE
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Get repository files
+        uses: actions/checkout@v4
+
+      - name: Extract latest uploaded ZIP
+        run: |
+          ZIP=$(find . -maxdepth 1 -name "*.zip" -print | sort | tail -n 1)
+          test -n "$ZIP"
+          mkdir extracted
+          unzip -q "$ZIP" -d extracted
+          SITE=$(find extracted -type f -name index.html -print -quit)
+          test -n "$SITE"
+          mkdir _site
+          cp -a "$(dirname "$SITE")/." _site/
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
